@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">Apex</string>
+
+    <string name="nav_accueil">Accueil</string>
+    <string name="nav_entrainements">Entraînements</string>
+
+    <string name="btn_creation_txt">Créer une séance</string>
+    <string name="btn_tous_entrainements">Tous les entraînements</string>
+    <string name="btn_enregistrer">Enregistrer</string>
+    <string name="btn_enregistrement">Enregistrement…</string>
+    <string name="btn_supprimer">Supprimer</string>
+    <string name="btn_annuler">Annuler</string>
+
+    <string name="cd_retour">Retour</string>
+    <string name="cd_supprimer">Supprimer</string>
+    <string name="cd_favori">Favori</string>
+    <string name="cd_fait">Séance complétée</string>
+    <string name="cd_creer">Créer un entraînement</string>
+
+    <string name="form_titre_ecran">Nouvel entraînement</string>
+    <string name="form_titre">Titre</string>
+    <string name="form_type">Type d’activité</string>
+    <string name="form_lieu">Lieu</string>
+    <string name="form_exterieur">À l’extérieur</string>
+    <string name="form_intensite">Intensité : %1$d / 10</string>
+    <string name="form_notes">Notes / Consignes</string>
+    <string name="titre_min_3">Le titre doit contenir au moins 3 caractères</string>
+    <string name="lieu_obligatoire">Le lieu est obligatoire</string>
+
+    <string name="recherche">Rechercher</string>
+    <string name="filtre_favoris">Favoris</string>
+    <string name="filtre_tous">Tous</string>
+    <string name="aucun_resultat">Aucun entraînement trouvé</string>
+
+    <string name="accueil_compteur">Séances complétées : %1$d / %2$d</string>
+    <string name="accueil_progression">Progression globale</string>
+    <string name="accueil_prochaine">Prochaine séance</string>
+    <string name="accueil_aucune">Aucune séance à venir</string>
+
+    <string name="detail_titre">Détails</string>
+    <string name="detail_type">Type d’activité : %1$s</string>
+    <string name="detail_lieu">Lieu : %1$s (%2$s)</string>
+    <string name="detail_intensite">Intensité : %1$d / 10</string>
+    <string name="detail_notes">Notes / Consignes</string>
+    <string name="detail_aucune_note">Aucune note.</string>
+    <string name="detail_completee">Séance complétée</string>
+    <string name="detail_introuvable">Entraînement introuvable!</string>
+    <string name="detail_supprimer_titre">Supprimer l’entraînement?</string>
+    <string name="detail_supprimer_message">Voulez-vous vraiment supprimer cet entraînement?</string>
+
+    <string name="txt_ext">Extérieur</string>
+    <string name="txt_int">Intérieur</string>
+    <string name="intensite">Intensité : %1$d</string>
+
+    <string name="activite_course">Course</string>
+    <string name="activite_velo">Vélo</string>
+    <string name="activite_natation">Natation</string>
+    <string name="activite_musculation">Musculation</string>
+
+    <string name="erreur_generique">Une erreur est survenue.</string>
+</resources>
