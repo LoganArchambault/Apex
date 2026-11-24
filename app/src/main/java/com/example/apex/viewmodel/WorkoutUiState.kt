@@ -1,5 +1,6 @@
 package com.example.apex.viewmodel
 
+import com.example.apex.util.UiMessage
 import com.example.apex.data.EnumTypeActivite
 import com.example.apex.data.Workout
 
@@ -13,6 +14,9 @@ data class WorkoutUiState(
     val totalCount: Int = 0,
     val completionProgress: Float = 0f,
     val nextWorkout: Workout? = null,
+    /** Boîte de dialogue « Surprenez-moi » ouverte ; suggestion = null → aucune séance à suggérer. */
+    val afficherSuggestion: Boolean = false,
+    val suggestion: Workout? = null,
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: UiMessage? = null
 )

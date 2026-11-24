@@ -1,5 +1,7 @@
 package com.example.apex.ui.components
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,12 +21,13 @@ fun BtnCreation(onClick: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(name = "Bouton création")
+@Preview(name = "Mode clair", uiMode = UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(name = "Mode sombre", uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun BtnCreationPreview() {
-    ApexTheme{
+    ApexTheme {
         BtnCreation(
-            onClick = {println("Bouton Création cliqué")}
-        );
+            onClick = {}
+        )
     }
 }

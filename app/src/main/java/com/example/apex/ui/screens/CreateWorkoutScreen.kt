@@ -1,5 +1,6 @@
 package com.example.apex.ui.screens
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,7 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -45,6 +45,41 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.apex.ui.theme.ApexTheme
+import com.example.apex.viewmodel.WorkoutViewModelFactory
+import com.example.apex.ui.components.ExerciseEditor
+import com.example.apex.ui.components.ExerciseSearchDialog
+import androidx.compose.material3.CircularProgressIndicator
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import android.text.format.DateFormat
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimeInput
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberTimePickerState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.core.content.ContextCompat
+import com.example.apex.ui.components.LigneInterrupteur
+import com.example.apex.ui.components.localeCourante
+import com.example.apex.util.formaterDateHeure
+import com.example.apex.util.libelleRes
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,15 +87,37 @@ fun CreateWorkoutScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     onWorkoutCreated: () -> Unit,
-    viewModel: CreateWorkoutViewModel = viewModel()
+    idWorkout: Int? = null,
+    viewModel: CreateWorkoutViewModel = viewModel(factory = WorkoutViewModelFactory.creation(idWorkout))
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var menuOuvert by remember { mutableStateOf(false) }
+    var choisirDate by rememberSaveable { mutableStateOf(false) }
+    var choisirHeure by rememberSaveable { mutableStateOf(false) }
+    var expliquerNotifications by rememberSaveable { mutableStateOf(false) }
+    var notificationsRefusees by rememberSaveable { mutableStateOf(false) }
+    val contexte = LocalContext.current
+
+    val demandeNotifications = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { accordee -> notificationsRefusees = !accordee }
+
+    // POST_NOTIFICATIONS est demandée au moment où l'utilisateur active un rappel (jamais au
+    // démarrage), et seulement après une explication.
+    val onRappelChange: (Boolean) -> Unit = { actif ->
+        viewModel.modifierRappel(actif)
+        if (actif && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(contexte, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            expliquerNotifications = true
+        }
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.form_titre_ecran)) },
+                title = { Text(if (idWorkout == null) stringResource(R.string.form_titre_ecran) else stringResource(R.string.form_modifier)) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
@@ -72,6 +129,10 @@ fun CreateWorkoutScreen(
             )
         }
     ) { innerPadding ->
+        if (uiState.isLoading) {
+            CircularProgressIndicator(Modifier.padding(innerPadding).padding(24.dp))
+            return@Scaffold
+        }
         CreateWorkoutContent(
             uiState = uiState,
             modifier = modifier.padding(innerPadding),
@@ -89,9 +150,126 @@ fun CreateWorkoutScreen(
             onSaveClick = {
                 viewModel.creerWorkout(onWorkoutCreated)
             },
-            formulaireValide = viewModel.estValide()
+            onChoisirDate = { choisirDate = true },
+            onChoisirHeure = { choisirHeure = true },
+            onEffacerDate = viewModel::effacerDate,
+            onRappelChange = onRappelChange,
+            notificationsRefusees = notificationsRefusees,
+            formulaireValide = viewModel.estValide(),
+            onAddExercise = viewModel::ouvrirRecherche,
+            onExerciseChange = viewModel::modifierExercice,
+            onDeleteExercise = viewModel::supprimerExercice
         )
+        if (uiState.rechercheOuverte) {
+            ExerciseSearchDialog(uiState, viewModel::modifierMotCle, viewModel::chercherExercices,
+                viewModel::ajouterExercice, viewModel::fermerRecherche)
+        }
+        if (choisirDate) {
+            SelecteurDate(
+                dateInitiale = uiState.datePrevue,
+                onConfirmer = { date ->
+                    viewModel.modifierDate(date)
+                    choisirDate = false
+                    // Enchaîne avec l'heure : un seul parcours pour « date et heure prévues ».
+                    choisirHeure = true
+                },
+                onDismiss = { choisirDate = false }
+            )
+        }
+        if (choisirHeure) {
+            SelecteurHeure(
+                dateInitiale = uiState.datePrevue,
+                onConfirmer = { heure, minute ->
+                    viewModel.modifierHeure(heure, minute)
+                    choisirHeure = false
+                },
+                onDismiss = { choisirHeure = false }
+            )
+        }
+        if (expliquerNotifications) {
+            AlertDialog(
+                onDismissRequest = { expliquerNotifications = false },
+                title = { Text(stringResource(R.string.permission_notif_titre)) },
+                text = { Text(stringResource(R.string.permission_notif_explication)) },
+                confirmButton = {
+                    TextButton(onClick = {
+                        expliquerNotifications = false
+                        demandeNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    }) { Text(stringResource(R.string.btn_continuer)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        expliquerNotifications = false
+                        notificationsRefusees = true
+                    }) { Text(stringResource(R.string.btn_plus_tard)) }
+                }
+            )
+        }
     }
+}
+
+/** Sélecteur de date : seules les dates à partir d'aujourd'hui sont proposées. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SelecteurDate(
+    dateInitiale: Long?,
+    onConfirmer: (Long) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val aujourdhuiUtc = LocalDate.now().atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+    val etat = rememberDatePickerState(
+        // Le DatePicker travaille en minuit UTC du jour choisi.
+        initialSelectedDateMillis = dateInitiale?.let {
+            Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+                .atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+        },
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long) = utcTimeMillis >= aujourdhuiUtc
+        }
+    )
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                onClick = { etat.selectedDateMillis?.let(onConfirmer) },
+                enabled = etat.selectedDateMillis != null
+            ) { Text(stringResource(R.string.btn_ok)) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.btn_annuler)) } }
+    ) {
+        DatePicker(state = etat)
+    }
+}
+
+/** Sélecteur d'heure qui respecte le réglage 12 h / 24 h de l'appareil. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SelecteurHeure(
+    dateInitiale: Long?,
+    onConfirmer: (Int, Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val contexte = LocalContext.current
+    val heureInitiale = dateInitiale?.let { Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalTime() }
+        ?: LocalTime.now().plusHours(1).withMinute(0)
+    val etat = rememberTimePickerState(
+        initialHour = heureInitiale.hour,
+        initialMinute = heureInitiale.minute,
+        is24Hour = DateFormat.is24HourFormat(contexte)
+    )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.form_choisir_heure)) },
+        text = {
+            // TimeInput (saisie au clavier) reste lisible avec une police agrandie,
+            // contrairement au cadran du TimePicker.
+            if (LocalDensity.current.fontScale > 1.3f) TimeInput(state = etat) else TimePicker(state = etat)
+        },
+        confirmButton = {
+            TextButton(onClick = { onConfirmer(etat.hour, etat.minute) }) { Text(stringResource(R.string.btn_ok)) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.btn_annuler)) } }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,9 +286,17 @@ private fun CreateWorkoutContent(
     onIntensiteChange: (Int) -> Unit,
     onNotesChange: (String) -> Unit,
     onSaveClick: () -> Unit,
-    formulaireValide: Boolean
+    formulaireValide: Boolean,
+    onChoisirDate: () -> Unit = {},
+    onChoisirHeure: () -> Unit = {},
+    onEffacerDate: () -> Unit = {},
+    onRappelChange: (Boolean) -> Unit = {},
+    notificationsRefusees: Boolean = false,
+    onAddExercise: () -> Unit = {},
+    onExerciseChange: (Int, String, String, String) -> Unit = { _, _, _, _ -> },
+    onDeleteExercise: (Int) -> Unit = {}
 ) {
-    val typeSelectionne = nomTypeActivite(uiState.typeActivite)
+    val typeSelectionne = stringResource(uiState.typeActivite.libelleRes())
 
     Column(
         modifier = modifier
@@ -123,6 +309,7 @@ private fun CreateWorkoutContent(
         OutlinedTextField(
             value = uiState.titre,
             onValueChange = onTitreChange,
+            enabled = !uiState.isSaving,
             label = { Text(stringResource(R.string.form_titre)) },
             isError = uiState.erreurTitre,
             supportingText = {
@@ -135,7 +322,7 @@ private fun CreateWorkoutContent(
 
         ExposedDropdownMenuBox(
             expanded = menuOuvert,
-            onExpandedChange = onMenuChange,
+            onExpandedChange = { if (!uiState.isSaving) onMenuChange(it) },
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
@@ -160,7 +347,7 @@ private fun CreateWorkoutContent(
             ) {
                 EnumTypeActivite.entries.forEach { type ->
                     DropdownMenuItem(
-                        text = { Text(nomTypeActivite(type)) },
+                        text = { Text(stringResource(type.libelleRes())) },
                         onClick = { onTypeChange(type) }
                     )
                 }
@@ -170,6 +357,7 @@ private fun CreateWorkoutContent(
         OutlinedTextField(
             value = uiState.lieu,
             onValueChange = onLieuChange,
+            enabled = !uiState.isSaving,
             label = { Text(stringResource(R.string.form_lieu)) },
             isError = uiState.erreurLieu,
             supportingText = {
@@ -180,17 +368,21 @@ private fun CreateWorkoutContent(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(stringResource(R.string.form_exterieur))
-            Switch(
-                checked = uiState.isOutside,
-                onCheckedChange = onIsOutsideChange
-            )
-        }
+        LigneInterrupteur(
+            texte = stringResource(R.string.form_exterieur),
+            coche = uiState.isOutside,
+            onChange = onIsOutsideChange,
+            actif = !uiState.isSaving
+        )
+
+        SectionPlanification(
+            uiState = uiState,
+            onChoisirDate = onChoisirDate,
+            onChoisirHeure = onChoisirHeure,
+            onEffacerDate = onEffacerDate,
+            onRappelChange = onRappelChange,
+            notificationsRefusees = notificationsRefusees
+        )
 
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.form_intensite, uiState.intensite))
@@ -200,6 +392,7 @@ private fun CreateWorkoutContent(
                     onIntensiteChange(valeur.roundToInt())
                 },
                 valueRange = 1f..10f,
+                enabled = !uiState.isSaving,
                 steps = 8
             )
         }
@@ -207,10 +400,24 @@ private fun CreateWorkoutContent(
         OutlinedTextField(
             value = uiState.notes,
             onValueChange = onNotesChange,
+            enabled = !uiState.isSaving,
             label = { Text(stringResource(R.string.form_notes)) },
             minLines = 3,
             modifier = Modifier.fillMaxWidth()
         )
+
+        if (uiState.typeActivite == EnumTypeActivite.Musculation) {
+            Text(stringResource(R.string.exercices_musculation), style = MaterialTheme.typography.titleLarge)
+            uiState.exercices.forEachIndexed { index, exercice ->
+                ExerciseEditor(exercice,
+                    onChange = { series, repetitions, charge ->
+                        onExerciseChange(index, series, repetitions, charge)
+                    }, onDelete = { onDeleteExercise(index) }, enabled = !uiState.isSaving)
+            }
+            Button(onClick = onAddExercise, enabled = !uiState.isSaving && !uiState.chargementImpossible) {
+                Text(stringResource(R.string.exercice_ajouter))
+            }
+        }
 
         Button(
             onClick = onSaveClick,
@@ -228,40 +435,80 @@ private fun CreateWorkoutContent(
 
         if (uiState.erreur != null) {
             Text(
-                text = stringResource(R.string.erreur_generique),
+                text = uiState.erreur.asString(),
                 color = MaterialTheme.colorScheme.error
             )
         }
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun nomTypeActivite(type: EnumTypeActivite): String {
-    return when (type) {
-        EnumTypeActivite.Course -> stringResource(R.string.activite_course)
-        EnumTypeActivite.Velo -> stringResource(R.string.activite_velo)
-        EnumTypeActivite.Natation -> stringResource(R.string.activite_natation)
-        EnumTypeActivite.Musculation -> stringResource(R.string.activite_musculation)
+private fun SectionPlanification(
+    uiState: CreateWorkoutUiState,
+    onChoisirDate: () -> Unit,
+    onChoisirHeure: () -> Unit,
+    onEffacerDate: () -> Unit,
+    onRappelChange: (Boolean) -> Unit,
+    notificationsRefusees: Boolean
+) {
+    val locale = localeCourante()
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(stringResource(R.string.form_date_prevue), style = MaterialTheme.typography.titleMedium)
+        Text(
+            text = uiState.datePrevue?.let { formaterDateHeure(it, locale) }
+                ?: stringResource(R.string.form_date_aucune),
+            color = if (uiState.erreurDate != null) MaterialTheme.colorScheme.error
+            else MaterialTheme.colorScheme.onSurface
+        )
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            OutlinedButton(onClick = onChoisirDate, enabled = !uiState.isSaving) {
+                Text(stringResource(R.string.form_choisir_date))
+            }
+            OutlinedButton(onClick = onChoisirHeure, enabled = !uiState.isSaving) {
+                Text(stringResource(R.string.form_choisir_heure))
+            }
+            if (uiState.datePrevue != null && !uiState.rappelActif) {
+                TextButton(onClick = onEffacerDate, enabled = !uiState.isSaving) {
+                    Text(stringResource(R.string.form_effacer_date))
+                }
+            }
+        }
+
+        LigneInterrupteur(
+            texte = stringResource(R.string.form_rappel),
+            coche = uiState.rappelActif,
+            onChange = onRappelChange,
+            actif = !uiState.isSaving
+        )
+        uiState.erreurDate?.let { erreur ->
+            Text(stringResource(erreur), color = MaterialTheme.colorScheme.error)
+        }
+        if (uiState.rappelActif && notificationsRefusees) {
+            Text(stringResource(R.string.permission_notif_refusee), color = MaterialTheme.colorScheme.error)
+        }
     }
 }
 
-@Preview(name = "Mode clair", showBackground = true)
-@Preview(
-    name = "Mode sombre",
-    uiMode = UI_MODE_NIGHT_YES,
-    showBackground = true
-)
+@Preview(name = "Mode clair", uiMode = UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(name = "Mode sombre", uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Police agrandie", fontScale = 2f, showBackground = true, heightDp = 1600)
 @Composable
 fun CreateWorkoutPreview() {
     ApexTheme {
         CreateWorkoutContent(
             uiState = CreateWorkoutUiState(
-                titre = "Entraînement jambes",
+                titre = stringResource(R.string.preview_jambes),
                 typeActivite = EnumTypeActivite.Musculation,
-                lieu = "Gym",
+                lieu = stringResource(R.string.preview_gym),
                 isOutside = false,
                 intensite = 7,
-                notes = "Hip thrust, leg press et abductions"
+                notes = stringResource(R.string.preview_jambes_notes),
+                datePrevue = System.currentTimeMillis() + 86_400_000L,
+                rappelActif = true
             ),
             menuOuvert = false,
             onMenuChange = {},

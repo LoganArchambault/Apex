@@ -4,12 +4,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,20 +24,34 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.apex.R
+import com.example.apex.security.DisponibiliteAuth
 import com.example.apex.ui.navigation.CreateWorkoutRoute
 import com.example.apex.ui.navigation.DetailsRoute
+import com.example.apex.ui.navigation.EditWorkoutRoute
 import com.example.apex.ui.navigation.HomeRoute
+import com.example.apex.ui.navigation.ParametresRoute
 import com.example.apex.ui.navigation.WorkoutsRoute
 import com.example.apex.ui.screens.CreateWorkoutScreen
 import com.example.apex.ui.screens.HomeScreen
+import com.example.apex.ui.screens.ParametresScreen
 import com.example.apex.ui.screens.WorkoutDetailsScreen
 import com.example.apex.ui.screens.WorkoutsScreen
+import com.example.apex.viewmodel.WorkoutViewModelFactory
 import com.example.apex.viewmodel.WorkoutViewModel
 
+/**
+ * @param idSeanceDemandee séance à ouvrir (toucher d'une notification), null sinon.
+ * @param authentifier lance l'authentification de l'appareil ; le rappel n'est appelé qu'en cas de succès.
+ */
 @Composable
-fun ApexApp() {
+fun ApexApp(
+    idSeanceDemandee: Int? = null,
+    onSeanceOuverte: () -> Unit = {},
+    disponibiliteAuth: () -> DisponibiliteAuth = { DisponibiliteAuth.NON_SUPPORTEE },
+    authentifier: (onSucces: () -> Unit) -> Unit = {}
+) {
     val navController = rememberNavController()
-    val workoutViewModel: WorkoutViewModel = viewModel()
+    val workoutViewModel: WorkoutViewModel = viewModel(factory = WorkoutViewModelFactory.liste)
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntry?.destination
 
@@ -51,10 +67,8 @@ fun ApexApp() {
                         }
                     },
                     icon = {
-                        Icon(
-                            Icons.Default.Home,
-                            contentDescription = stringResource(R.string.nav_accueil)
-                        )
+                        // Le libellé du NavigationBarItem est déjà lu par TalkBack.
+                        Icon(Icons.Default.Home, contentDescription = null)
                     },
                     label = { Text(stringResource(R.string.nav_accueil)) }
                 )
@@ -67,12 +81,20 @@ fun ApexApp() {
                         }
                     },
                     icon = {
-                        Icon(
-                            Icons.Default.PlayArrow,
-                            contentDescription = stringResource(R.string.nav_entrainements)
-                        )
+                        Icon(Icons.Default.PlayArrow, contentDescription = null)
                     },
                     label = { Text(stringResource(R.string.nav_entrainements)) }
+                )
+
+                NavigationBarItem(
+                    selected = currentDestination?.hasRoute<ParametresRoute>() == true,
+                    onClick = {
+                        navController.navigate(ParametresRoute) {
+                            launchSingleTop = true
+                        }
+                    },
+                    icon = { Icon(Icons.Default.Settings, contentDescription = null) },
+                    label = { Text(stringResource(R.string.nav_parametres)) }
                 )
             }
         }
@@ -80,6 +102,10 @@ fun ApexApp() {
         WorkoutsNavHost(
             navController = navController,
             workoutViewModel = workoutViewModel,
+            disponibiliteAuth = disponibiliteAuth,
+            authentifier = authentifier,
+            idSeanceDemandee = idSeanceDemandee,
+            onSeanceOuverte = onSeanceOuverte,
             modifier = Modifier.padding(innerPadding)
         )
     }
@@ -89,6 +115,10 @@ fun ApexApp() {
 private fun WorkoutsNavHost(
     navController: NavHostController,
     workoutViewModel: WorkoutViewModel,
+    disponibiliteAuth: () -> DisponibiliteAuth,
+    authentifier: (onSucces: () -> Unit) -> Unit,
+    idSeanceDemandee: Int?,
+    onSeanceOuverte: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -121,9 +151,22 @@ private fun WorkoutsNavHost(
             CreateWorkoutScreen(
                 onBackClick = { navController.popBackStack() },
                 onWorkoutCreated = {
-                    workoutViewModel.chargerWorkouts()
                     navController.popBackStack()
                 }
+            )
+        }
+
+        composable<EditWorkoutRoute> { backStackEntry ->
+            val route: EditWorkoutRoute = backStackEntry.toRoute()
+            CreateWorkoutScreen(idWorkout = route.idWorkout,
+                onBackClick = { navController.popBackStack() },
+                onWorkoutCreated = { navController.popBackStack() })
+        }
+
+        composable<ParametresRoute> {
+            ParametresScreen(
+                lireDisponibilite = disponibiliteAuth,
+                authentifier = authentifier
             )
         }
 
@@ -132,11 +175,17 @@ private fun WorkoutsNavHost(
 
             WorkoutDetailsScreen(
                 idWorkout = route.idWorkout,
-                onWorkoutChanged = {
-                    workoutViewModel.chargerWorkouts()
-                },
+                onEditClick = { navController.navigate(EditWorkoutRoute(route.idWorkout)) },
                 onBackClick = { navController.popBackStack() }
             )
+        }
+    }
+
+    // Notification touchée : ouverture de la fiche détaillée avec l'identifiant reçu.
+    LaunchedEffect(idSeanceDemandee) {
+        if (idSeanceDemandee != null) {
+            navController.navigate(DetailsRoute(idSeanceDemandee)) { launchSingleTop = true }
+            onSeanceOuverte()
         }
     }
 }

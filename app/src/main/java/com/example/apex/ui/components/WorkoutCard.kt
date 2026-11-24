@@ -1,8 +1,14 @@
 package com.example.apex.ui.components
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import com.example.apex.util.formaterDateHeure
+import com.example.apex.util.libelleRes
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -50,11 +56,13 @@ fun WorkoutCard(
         notes = workout.notes,
         done = workout.done,
         favori = workout.favori,
+        datePrevue = workout.datePrevue,
         onFavoriToggle = onFavoriToggle,
         onCardClick = onCardClick
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun WorkoutCard(
     id: Int = 0,
@@ -66,9 +74,11 @@ fun WorkoutCard(
     notes: String,
     done: Boolean,
     favori: Boolean = false,
+    datePrevue: Long? = null,
     onFavoriToggle: () -> Unit = {},
     onCardClick: (Int) -> Unit = {}
 ) {
+    val locale = localeCourante()
     Card(
         onClick = { onCardClick(id) },
         modifier = Modifier
@@ -88,13 +98,17 @@ fun WorkoutCard(
 
                     Spacer(modifier = Modifier.height(6.dp))
 
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    // FlowRow : le lieu passe à la ligne avec une police agrandie au lieu d'être écrasé.
+                    FlowRow(
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        itemVerticalAlignment = Alignment.CenterVertically
+                    ) {
                         Surface(
                             tonalElevation = 2.dp,
                             shape = RoundedCornerShape(16.dp)
                         ) {
                             Text(
-                                text = nomTypeActiviteCard(typeActivite),
+                                text = stringResource(typeActivite.libelleRes()),
                                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                                 style = MaterialTheme.typography.labelSmall
                             )
@@ -112,6 +126,14 @@ fun WorkoutCard(
 
                         Text(
                             text = lieu,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+
+                    if (datePrevue != null) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = formaterDateHeure(datePrevue, locale),
                             style = MaterialTheme.typography.bodySmall
                         )
                     }
@@ -172,29 +194,23 @@ fun WorkoutCard(
     }
 }
 
-@Composable
-private fun nomTypeActiviteCard(type: EnumTypeActivite): String {
-    return when (type) {
-        EnumTypeActivite.Course -> stringResource(R.string.activite_course)
-        EnumTypeActivite.Velo -> stringResource(R.string.activite_velo)
-        EnumTypeActivite.Natation -> stringResource(R.string.activite_natation)
-        EnumTypeActivite.Musculation -> stringResource(R.string.activite_musculation)
-    }
-}
 
-@Preview(showBackground = true)
+@Preview(name = "Mode clair", uiMode = UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(name = "Mode sombre", uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Police agrandie", fontScale = 2f, showBackground = true)
 @Composable
 fun WorkoutCardPreview() {
     ApexTheme {
         WorkoutCard(
             id = 1,
-            titre = "Séance de course",
+            titre = stringResource(R.string.preview_course),
             typeActivite = EnumTypeActivite.Course,
-            lieu = "Parc",
+            lieu = stringResource(R.string.preview_parc),
             isOutside = true,
             intensite = 7,
-            notes = "Bonne séance",
-            done = true
+            notes = stringResource(R.string.preview_bonne_seance),
+            done = true,
+            datePrevue = 1_790_000_000_000L
         )
     }
 }

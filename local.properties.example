@@ -1,0 +1,3 @@
+# Copier vers local.properties (ce dernier est ignoré par Git).
+# sdk.dir=/chemin/vers/Android/Sdk
+MOVEBASE_API_KEY=VOTRE_CLE_RAPIDAPI

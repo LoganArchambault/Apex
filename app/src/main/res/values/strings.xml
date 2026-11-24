@@ -1,46 +1,93 @@
 <resources>
-    <string name="app_name">Apex</string>
+    <string name="app_name" translatable="false">Apex</string>
 
+    <!-- Navigation -->
     <string name="nav_accueil">Accueil</string>
     <string name="nav_entrainements">Entraînements</string>
+    <string name="nav_parametres">Paramètres</string>
 
+    <!-- Boutons -->
     <string name="btn_creation_txt">Créer une séance</string>
     <string name="btn_tous_entrainements">Tous les entraînements</string>
     <string name="btn_enregistrer">Enregistrer</string>
     <string name="btn_enregistrement">Enregistrement…</string>
     <string name="btn_supprimer">Supprimer</string>
     <string name="btn_annuler">Annuler</string>
+    <string name="btn_choisir">Choisir</string>
+    <string name="btn_fermer">Fermer</string>
+    <string name="btn_continuer">Continuer</string>
+    <string name="btn_plus_tard">Plus tard</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_reessayer">Réessayer</string>
+    <string name="btn_ouvrir_parametres">Ouvrir les paramètres</string>
+    <string name="btn_marquer_complete">Marquer complétée</string>
+    <string name="btn_surprenez_moi">Surprenez-moi</string>
 
+    <!-- Descriptions de contenu (accessibilité) -->
     <string name="cd_retour">Retour</string>
-    <string name="cd_supprimer">Supprimer</string>
-    <string name="cd_favori">Favori</string>
+    <string name="cd_supprimer">Supprimer la séance</string>
+    <string name="cd_favori_ajouter">Ajouter aux favoris</string>
+    <string name="cd_favori_retirer">Retirer des favoris</string>
     <string name="cd_fait">Séance complétée</string>
     <string name="cd_creer">Créer un entraînement</string>
 
+    <!-- Formulaire -->
     <string name="form_titre_ecran">Nouvel entraînement</string>
+    <string name="form_modifier">Modifier la séance</string>
     <string name="form_titre">Titre</string>
     <string name="form_type">Type d’activité</string>
     <string name="form_lieu">Lieu</string>
     <string name="form_exterieur">À l’extérieur</string>
     <string name="form_intensite">Intensité : %1$d / 10</string>
     <string name="form_notes">Notes / Consignes</string>
+    <string name="form_date_prevue">Date et heure prévues</string>
+    <string name="form_date_aucune">Aucune date prévue</string>
+    <string name="form_choisir_date">Choisir la date</string>
+    <string name="form_choisir_heure">Choisir l’heure</string>
+    <string name="form_effacer_date">Effacer la date</string>
+    <string name="form_rappel">Me rappeler</string>
     <string name="titre_min_3">Le titre doit contenir au moins 3 caractères</string>
     <string name="lieu_obligatoire">Le lieu est obligatoire</string>
+    <string name="date_obligatoire_rappel">La date et l’heure sont obligatoires lorsque le rappel est actif.</string>
+    <string name="date_dans_le_futur">La date et l’heure prévues doivent être dans le futur.</string>
 
+    <!-- Liste -->
     <string name="recherche">Rechercher</string>
     <string name="filtre_favoris">Favoris</string>
     <string name="filtre_tous">Tous</string>
     <string name="aucun_resultat">Aucun entraînement trouvé</string>
+    <plurals name="nb_seances_affichees">
+        <item quantity="one">%d séance affichée</item>
+        <item quantity="many">%d séances affichées</item>
+        <item quantity="other">%d séances affichées</item>
+    </plurals>
 
-    <string name="accueil_compteur">Séances complétées : %1$d / %2$d</string>
+    <!-- Tableau de bord -->
+    <plurals name="accueil_compteur">
+        <item quantity="one">%1$d séance complétée sur %2$d</item>
+        <item quantity="many">%1$d séances complétées sur %2$d</item>
+        <item quantity="other">%1$d séances complétées sur %2$d</item>
+    </plurals>
     <string name="accueil_progression">Progression globale</string>
     <string name="accueil_prochaine">Prochaine séance</string>
     <string name="accueil_aucune">Aucune séance à venir</string>
+    <string name="suggestion_titre">Et si vous faisiez…</string>
+    <string name="suggestion_texte">%1$s\n%2$s • %3$s</string>
+    <string name="suggestion_aucune">Aucune séance à suggérer</string>
+    <string name="suggestion_voir_fiche">Voir la fiche</string>
 
+    <!-- Fiche détaillée -->
     <string name="detail_titre">Détails</string>
     <string name="detail_type">Type d’activité : %1$s</string>
     <string name="detail_lieu">Lieu : %1$s (%2$s)</string>
     <string name="detail_intensite">Intensité : %1$d / 10</string>
+    <string name="detail_date_prevue">Prévue : %1$s</string>
+    <string name="detail_non_planifiee">Aucune date prévue</string>
+    <string name="detail_rappel_actif">Rappel : activé</string>
+    <string name="detail_rappel_envoye">Rappel : envoyé</string>
+    <string name="detail_rappel_inactif">Rappel : désactivé</string>
+    <string name="detail_distance">Distance parcourue : %1$s</string>
+    <string name="detail_duree">Durée réelle : %1$s</string>
     <string name="detail_notes">Notes / Consignes</string>
     <string name="detail_aucune_note">Aucune note.</string>
     <string name="detail_completee">Séance complétée</string>
@@ -57,5 +104,114 @@
     <string name="activite_natation">Natation</string>
     <string name="activite_musculation">Musculation</string>
 
+    <!-- Exercices -->
+    <string name="exercices_titre">Exercices</string>
+    <string name="exercices_aucun">Aucun exercice associé.</string>
+    <plurals name="nb_series">
+        <item quantity="one">%d série</item>
+        <item quantity="many">%d séries</item>
+        <item quantity="other">%d séries</item>
+    </plurals>
+    <plurals name="nb_repetitions">
+        <item quantity="one">%d répétition</item>
+        <item quantity="many">%d répétitions</item>
+        <item quantity="other">%d répétitions</item>
+    </plurals>
+    <string name="exercice_configuration">%1$s × %2$s • %3$s kg</string>
+    <string name="exercices_musculation">Exercices de musculation</string>
+    <string name="exercice_ajouter">Ajouter un exercice</string>
+    <string name="exercice_langue_info">Instructions en français. Les noms du catalogue peuvent être en anglais.</string>
+    <string name="exercice_mot_cle">Mot-clé (ex. : press)</string>
+    <string name="exercice_recherche_vide">Aucun exercice trouvé. Essayez un autre mot-clé, éventuellement en anglais.</string>
+    <string name="exercice_series">Séries</string>
+    <string name="exercice_repetitions">Répétitions</string>
+    <string name="exercice_charge">Charge (kg)</string>
+    <string name="exercice_validation">Séries et répétitions : entiers supérieurs à 0. Charge : nombre positif ou nul.</string>
+    <string name="exercice_retirer">Retirer cet exercice</string>
+    <string name="separateur_caracteristiques">" • "</string>
+
+    <!-- Unités (le nombre est formaté selon la locale) -->
+    <string name="distance_km">%1$s km</string>
+    <string name="distance_mi">%1$s mi</string>
+
+    <!-- Suivi GPS -->
+    <string name="suivi_titre">Suivi GPS</string>
+    <string name="suivi_demarrer">Démarrer le suivi</string>
+    <string name="suivi_arreter">Arrêter le suivi</string>
+    <string name="suivi_duree">Durée : %1$s</string>
+    <string name="suivi_distance">Distance : %1$s</string>
+    <string name="suivi_autre_en_cours">Un autre suivi est déjà en cours. Arrêtez-le avant d’en démarrer un nouveau.</string>
+    <string name="suivi_termine_titre">Suivi terminé</string>
+    <string name="suivi_resultat">%1$s en %2$s</string>
+    <string name="suivi_termine_question">Voulez-vous marquer cette séance comme complétée?</string>
+
+    <!-- Permissions -->
+    <string name="permission_notif_titre">Autoriser les rappels?</string>
+    <string name="permission_notif_explication">Apex a besoin d’afficher des notifications pour vous rappeler une séance dans l’heure qui précède son début.</string>
+    <string name="permission_notif_refusee">Notifications refusées : les rappels n’apparaîtront pas. Vous pouvez les autoriser dans les paramètres de l’appareil.</string>
+    <string name="permission_localisation_titre">Position précise requise</string>
+    <string name="permission_localisation_explication">Pour mesurer la distance parcourue, Apex utilise votre position précise uniquement pendant le suivi, lorsque vous le démarrez. Aucune position n’est conservée ni transmise : seules la distance et la durée sont enregistrées. Une notification affichera la progression.</string>
+    <string name="permission_localisation_approximative">La position approximative ne permet pas de mesurer une distance. Le suivi exige la position précise.</string>
+    <string name="permission_localisation_refusee">Sans accès à la position, le suivi GPS est impossible. Le reste de l’application demeure utilisable. Vous pouvez accorder la permission dans les paramètres.</string>
+
+    <!-- Notifications -->
+    <string name="canal_rappels_nom">Rappels</string>
+    <string name="canal_rappels_description">Rappels des séances qui débutent bientôt</string>
+    <string name="canal_suivi_nom">Suivi</string>
+    <string name="canal_suivi_description">Progression du suivi GPS en cours</string>
+    <string name="notif_rappel_titre">Rappel : %1$s</string>
+    <string name="notif_rappel_texte">%1$s • %2$s • %3$s</string>
+    <string name="notif_suivi_titre">Suivi de la séance en cours</string>
+    <string name="notif_suivi_texte">Durée : %1$s • Distance : %2$s</string>
+    <string name="notif_suivi_arreter">Arrêter</string>
+
+    <!-- Verrouillage -->
+    <string name="parametres_titre">Paramètres</string>
+    <string name="parametres_verrouiller">Verrouiller l’application</string>
+    <string name="parametres_verrouiller_description">Exige la biométrie ou le code de l’appareil au lancement et après 30 secondes en arrière-plan.</string>
+    <string name="parametres_verrouiller_aucun_identifiant">Option indisponible : aucune empreinte, aucun visage ni aucun code, schéma ou NIP n’est configuré sur l’appareil.</string>
+    <string name="parametres_verrouiller_non_supporte">Option indisponible : cet appareil ne permet pas l’authentification.</string>
+    <string name="auth_titre">Déverrouiller Apex</string>
+    <string name="auth_sous_titre">Utilisez la biométrie ou le code de l’appareil</string>
+    <string name="verrou_titre">Application verrouillée</string>
+    <string name="verrou_message">Authentifiez-vous pour accéder à vos séances.</string>
+    <string name="verrou_bouton">Déverrouiller</string>
+
+    <!-- Erreurs -->
     <string name="erreur_generique">Une erreur est survenue.</string>
+    <string name="erreur_movebase_cle">La clé MoveBase est absente. Configurez MOVEBASE_API_KEY dans local.properties.</string>
+    <string name="erreur_movebase_recherche">MoveBase n’a pas pu effectuer la recherche.</string>
+    <string name="erreur_connexion">Connexion impossible. Vérifiez Internet. Vos séances enregistrées restent consultables et modifiables hors ligne.</string>
+    <string name="erreur_movebase_acces">Accès MoveBase refusé. Vérifiez la clé et votre abonnement RapidAPI.</string>
+    <string name="erreur_movebase_quota">Limite de requêtes MoveBase atteinte. Réessayez plus tard.</string>
+    <string name="erreur_movebase_http">Erreur MoveBase (%1$d). Réessayez plus tard.</string>
+    <string name="erreur_movebase_reponse">La réponse MoveBase est illisible. Réessayez plus tard.</string>
+    <string name="erreur_seance_introuvable">Séance introuvable.</string>
+    <string name="erreur_recherche">Recherche impossible. Réessayez.</string>
+    <string name="erreur_sauvegarde">Sauvegarde impossible.</string>
+    <string name="erreur_operation">Opération impossible.</string>
+
+    <!-- Aperçus (@Preview) -->
+    <string name="preview_course">Séance de course</string>
+    <string name="preview_natation">Séance de natation</string>
+    <string name="preview_velo">Séance de vélo</string>
+    <string name="preview_musculation">Séance de musculation</string>
+    <string name="preview_parc">Parc</string>
+    <string name="preview_piscine">Piscine</string>
+    <string name="preview_montagne">Montagne</string>
+    <string name="preview_salle">Salle de sport</string>
+    <string name="preview_bonne_seance">Bonne séance</string>
+    <string name="preview_excellente_seance">Excellente séance</string>
+    <string name="preview_seance_difficile">Séance difficile mais agréable</string>
+    <string name="preview_seance_intense">Séance intense mais satisfaisante</string>
+    <string name="preview_course_matin">Course du matin</string>
+    <string name="preview_course_notes">Course tranquille de 5 km</string>
+    <string name="preview_jambes">Entraînement jambes</string>
+    <string name="preview_gym">Gym</string>
+    <string name="preview_jambes_notes">Hip thrust, leg press et abductions</string>
+    <string name="preview_exercice_nom">Développé couché</string>
+    <string name="preview_exercice_muscle">Pectoraux</string>
+    <string name="preview_exercice_equipement">Barre</string>
+    <string name="preview_exercice_instructions">Descendez la barre vers la poitrine, puis poussez.</string>
+    <string name="preview_exercice_recherche">press</string>
 </resources>

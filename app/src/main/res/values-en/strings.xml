@@ -1,0 +1,211 @@
+<resources>
+    <!-- Navigation -->
+    <string name="nav_accueil">Home</string>
+    <string name="nav_entrainements">Workouts</string>
+    <string name="nav_parametres">Settings</string>
+
+    <!-- Buttons -->
+    <string name="btn_creation_txt">Create a workout</string>
+    <string name="btn_tous_entrainements">All workouts</string>
+    <string name="btn_enregistrer">Save</string>
+    <string name="btn_enregistrement">Saving…</string>
+    <string name="btn_supprimer">Delete</string>
+    <string name="btn_annuler">Cancel</string>
+    <string name="btn_choisir">Select</string>
+    <string name="btn_fermer">Close</string>
+    <string name="btn_continuer">Continue</string>
+    <string name="btn_plus_tard">Not now</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_reessayer">Try again</string>
+    <string name="btn_ouvrir_parametres">Open settings</string>
+    <string name="btn_marquer_complete">Mark as completed</string>
+    <string name="btn_surprenez_moi">Surprise me</string>
+
+    <!-- Content descriptions (accessibility) -->
+    <string name="cd_retour">Back</string>
+    <string name="cd_supprimer">Delete workout</string>
+    <string name="cd_favori_ajouter">Add to favorites</string>
+    <string name="cd_favori_retirer">Remove from favorites</string>
+    <string name="cd_fait">Workout completed</string>
+    <string name="cd_creer">Create a workout</string>
+
+    <!-- Form -->
+    <string name="form_titre_ecran">New workout</string>
+    <string name="form_modifier">Edit workout</string>
+    <string name="form_titre">Title</string>
+    <string name="form_type">Activity type</string>
+    <string name="form_lieu">Location</string>
+    <string name="form_exterieur">Outdoors</string>
+    <string name="form_intensite">Intensity: %1$d / 10</string>
+    <string name="form_notes">Notes / Instructions</string>
+    <string name="form_date_prevue">Scheduled date and time</string>
+    <string name="form_date_aucune">No date scheduled</string>
+    <string name="form_choisir_date">Pick a date</string>
+    <string name="form_choisir_heure">Pick a time</string>
+    <string name="form_effacer_date">Clear date</string>
+    <string name="form_rappel">Remind me</string>
+    <string name="titre_min_3">The title must be at least 3 characters long</string>
+    <string name="lieu_obligatoire">The location is required</string>
+    <string name="date_obligatoire_rappel">A date and time are required when the reminder is on.</string>
+    <string name="date_dans_le_futur">The scheduled date and time must be in the future.</string>
+
+    <!-- List -->
+    <string name="recherche">Search</string>
+    <string name="filtre_favoris">Favorites</string>
+    <string name="filtre_tous">All</string>
+    <string name="aucun_resultat">No workouts found</string>
+    <plurals name="nb_seances_affichees">
+        <item quantity="one">%d workout shown</item>
+        <item quantity="other">%d workouts shown</item>
+    </plurals>
+
+    <!-- Dashboard -->
+    <plurals name="accueil_compteur">
+        <item quantity="one">%1$d workout completed out of %2$d</item>
+        <item quantity="other">%1$d workouts completed out of %2$d</item>
+    </plurals>
+    <string name="accueil_progression">Overall progress</string>
+    <string name="accueil_prochaine">Next workout</string>
+    <string name="accueil_aucune">No upcoming workouts</string>
+    <string name="suggestion_titre">How about…</string>
+    <string name="suggestion_texte">%1$s\n%2$s • %3$s</string>
+    <string name="suggestion_aucune">No workout to suggest</string>
+    <string name="suggestion_voir_fiche">View details</string>
+
+    <!-- Details -->
+    <string name="detail_titre">Details</string>
+    <string name="detail_type">Activity type: %1$s</string>
+    <string name="detail_lieu">Location: %1$s (%2$s)</string>
+    <string name="detail_intensite">Intensity: %1$d / 10</string>
+    <string name="detail_date_prevue">Scheduled: %1$s</string>
+    <string name="detail_non_planifiee">No date scheduled</string>
+    <string name="detail_rappel_actif">Reminder: on</string>
+    <string name="detail_rappel_envoye">Reminder: sent</string>
+    <string name="detail_rappel_inactif">Reminder: off</string>
+    <string name="detail_distance">Distance covered: %1$s</string>
+    <string name="detail_duree">Actual duration: %1$s</string>
+    <string name="detail_notes">Notes / Instructions</string>
+    <string name="detail_aucune_note">No notes.</string>
+    <string name="detail_completee">Workout completed</string>
+    <string name="detail_introuvable">Workout not found!</string>
+    <string name="detail_supprimer_titre">Delete this workout?</string>
+    <string name="detail_supprimer_message">Do you really want to delete this workout?</string>
+
+    <string name="txt_ext">Outdoors</string>
+    <string name="txt_int">Indoors</string>
+    <string name="intensite">Intensity: %1$d</string>
+
+    <string name="activite_course">Running</string>
+    <string name="activite_velo">Cycling</string>
+    <string name="activite_natation">Swimming</string>
+    <string name="activite_musculation">Strength training</string>
+
+    <!-- Exercises -->
+    <string name="exercices_titre">Exercises</string>
+    <string name="exercices_aucun">No exercises added.</string>
+    <plurals name="nb_series">
+        <item quantity="one">%d set</item>
+        <item quantity="other">%d sets</item>
+    </plurals>
+    <plurals name="nb_repetitions">
+        <item quantity="one">%d rep</item>
+        <item quantity="other">%d reps</item>
+    </plurals>
+    <string name="exercice_configuration">%1$s × %2$s • %3$s kg</string>
+    <string name="exercices_musculation">Strength exercises</string>
+    <string name="exercice_ajouter">Add an exercise</string>
+    <string name="exercice_langue_info">Instructions in English.</string>
+    <string name="exercice_mot_cle">Keyword (e.g. press)</string>
+    <string name="exercice_recherche_vide">No exercises found. Try another keyword.</string>
+    <string name="exercice_series">Sets</string>
+    <string name="exercice_repetitions">Reps</string>
+    <string name="exercice_charge">Weight (kg)</string>
+    <string name="exercice_validation">Sets and reps: whole numbers greater than 0. Weight: zero or a positive number.</string>
+    <string name="exercice_retirer">Remove this exercise</string>
+    <string name="separateur_caracteristiques">" • "</string>
+
+    <!-- Units (the number is formatted for the locale) -->
+    <string name="distance_km">%1$s km</string>
+    <string name="distance_mi">%1$s mi</string>
+
+    <!-- GPS tracking -->
+    <string name="suivi_titre">GPS tracking</string>
+    <string name="suivi_demarrer">Start tracking</string>
+    <string name="suivi_arreter">Stop tracking</string>
+    <string name="suivi_duree">Duration: %1$s</string>
+    <string name="suivi_distance">Distance: %1$s</string>
+    <string name="suivi_autre_en_cours">Another workout is already being tracked. Stop it before starting a new one.</string>
+    <string name="suivi_termine_titre">Tracking finished</string>
+    <string name="suivi_resultat">%1$s in %2$s</string>
+    <string name="suivi_termine_question">Do you want to mark this workout as completed?</string>
+
+    <!-- Permissions -->
+    <string name="permission_notif_titre">Allow reminders?</string>
+    <string name="permission_notif_explication">Apex needs to show notifications to remind you of a workout during the hour before it starts.</string>
+    <string name="permission_notif_refusee">Notifications denied: reminders will not appear. You can allow them in the device settings.</string>
+    <string name="permission_localisation_titre">Precise location required</string>
+    <string name="permission_localisation_explication">To measure the distance covered, Apex uses your precise location only while tracking, after you start it. No location is kept or shared: only the distance and duration are saved. A notification will show the progress.</string>
+    <string name="permission_localisation_approximative">Approximate location cannot measure a distance. Tracking requires your precise location.</string>
+    <string name="permission_localisation_refusee">Without location access, GPS tracking is not possible. The rest of the app remains available. You can grant the permission in the settings.</string>
+
+    <!-- Notifications -->
+    <string name="canal_rappels_nom">Reminders</string>
+    <string name="canal_rappels_description">Reminders for workouts starting soon</string>
+    <string name="canal_suivi_nom">Tracking</string>
+    <string name="canal_suivi_description">Progress of the current GPS tracking</string>
+    <string name="notif_rappel_titre">Reminder: %1$s</string>
+    <string name="notif_rappel_texte">%1$s • %2$s • %3$s</string>
+    <string name="notif_suivi_titre">Workout tracking in progress</string>
+    <string name="notif_suivi_texte">Duration: %1$s • Distance: %2$s</string>
+    <string name="notif_suivi_arreter">Stop</string>
+
+    <!-- Lock -->
+    <string name="parametres_titre">Settings</string>
+    <string name="parametres_verrouiller">Lock the app</string>
+    <string name="parametres_verrouiller_description">Requires biometrics or the device screen lock at launch and after 30 seconds in the background.</string>
+    <string name="parametres_verrouiller_aucun_identifiant">Unavailable: no fingerprint, face, PIN, pattern or password is set up on this device.</string>
+    <string name="parametres_verrouiller_non_supporte">Unavailable: this device does not support authentication.</string>
+    <string name="auth_titre">Unlock Apex</string>
+    <string name="auth_sous_titre">Use biometrics or your device screen lock</string>
+    <string name="verrou_titre">App locked</string>
+    <string name="verrou_message">Authenticate to access your workouts.</string>
+    <string name="verrou_bouton">Unlock</string>
+
+    <!-- Errors -->
+    <string name="erreur_generique">Something went wrong.</string>
+    <string name="erreur_movebase_cle">The MoveBase key is missing. Set MOVEBASE_API_KEY in local.properties.</string>
+    <string name="erreur_movebase_recherche">MoveBase could not complete the search.</string>
+    <string name="erreur_connexion">Unable to connect. Check your Internet connection. Your saved workouts remain available and editable offline.</string>
+    <string name="erreur_movebase_acces">MoveBase access denied. Check the key and your RapidAPI subscription.</string>
+    <string name="erreur_movebase_quota">MoveBase request limit reached. Try again later.</string>
+    <string name="erreur_movebase_http">MoveBase error (%1$d). Try again later.</string>
+    <string name="erreur_movebase_reponse">The MoveBase response could not be read. Try again later.</string>
+    <string name="erreur_seance_introuvable">Workout not found.</string>
+    <string name="erreur_recherche">Search failed. Try again.</string>
+    <string name="erreur_sauvegarde">Unable to save.</string>
+    <string name="erreur_operation">Operation failed.</string>
+
+    <!-- Previews (@Preview) -->
+    <string name="preview_course">Running workout</string>
+    <string name="preview_natation">Swimming workout</string>
+    <string name="preview_velo">Cycling workout</string>
+    <string name="preview_musculation">Strength workout</string>
+    <string name="preview_parc">Park</string>
+    <string name="preview_piscine">Pool</string>
+    <string name="preview_montagne">Mountain</string>
+    <string name="preview_salle">Gym</string>
+    <string name="preview_bonne_seance">Good workout</string>
+    <string name="preview_excellente_seance">Excellent workout</string>
+    <string name="preview_seance_difficile">Hard but enjoyable workout</string>
+    <string name="preview_seance_intense">Intense but rewarding workout</string>
+    <string name="preview_course_matin">Morning run</string>
+    <string name="preview_course_notes">Easy 5 km run</string>
+    <string name="preview_jambes">Leg day</string>
+    <string name="preview_gym">Gym</string>
+    <string name="preview_jambes_notes">Hip thrusts, leg press and abductions</string>
+    <string name="preview_exercice_nom">Bench press</string>
+    <string name="preview_exercice_muscle">Chest</string>
+    <string name="preview_exercice_equipement">Barbell</string>
+    <string name="preview_exercice_instructions">Lower the bar to your chest, then press up.</string>
+    <string name="preview_exercice_recherche">press</string>
+</resources>
