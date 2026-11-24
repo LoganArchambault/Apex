@@ -88,6 +88,9 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.play.services.location)
     implementation(libs.androidx.biometric)
+    // biometric tire fragment 1.2.x, incompatible avec rememberLauncherForActivityResult dans une
+    // FragmentActivity (« Can only use lower 16 bits for requestCode ») : corrigé dès 1.3.0.
+    implementation(libs.androidx.fragment)
     implementation(libs.androidx.lifecycle.process)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
