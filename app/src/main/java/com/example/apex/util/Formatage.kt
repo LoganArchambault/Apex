@@ -17,10 +17,6 @@ import java.util.Locale
  * service (Locale.getDefault()), qui n'ont pas accès à Compose.
  */
 
-/** Pays qui utilisent les milles plutôt que les kilomètres. */
-private val PAYS_MILLES = setOf("US", "LR", "MM")
-private const val METRES_PAR_MILLE = 1609.344
-
 /** Date et heure prévues : instant UTC converti au fuseau de l'appareil, style de la locale. */
 fun formaterDateHeure(millisUtc: Long, locale: Locale): String =
     Instant.ofEpochMilli(millisUtc)
@@ -44,13 +40,12 @@ fun formaterDuree(secondes: Long): String = DateUtils.formatElapsedTime(secondes
 data class DistanceAffichee(val valeur: String, @param:StringRes val unite: Int)
 
 fun distanceLocalisee(metres: Double, locale: Locale): DistanceAffichee {
-    val milles = locale.country in PAYS_MILLES
-    val valeur = if (milles) metres / METRES_PAR_MILLE else metres / 1000.0
+    // Toujours en kilomètres ; seul le séparateur décimal suit la locale (« 3,50 » / « 3.50 »).
     val texte = NumberFormat.getNumberInstance(locale).apply {
         minimumFractionDigits = 2
         maximumFractionDigits = 2
-    }.format(valeur)
-    return DistanceAffichee(texte, if (milles) R.string.distance_mi else R.string.distance_km)
+    }.format(metres / 1000.0)
+    return DistanceAffichee(texte, R.string.distance_km)
 }
 
 /** Nombre décimal (ex. : une charge) selon la locale : « 32,5 » (fr) · « 32.5 » (en). */
