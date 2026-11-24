@@ -126,6 +126,7 @@
 
     <!-- Units (the number is formatted for the locale) -->
     <string name="distance_km">%1$s km</string>
+    <string name="distance_mi">%1$s mi</string>
 
     <!-- GPS tracking -->
     <string name="suivi_titre">GPS tracking</string>

@@ -132,6 +132,7 @@
 
     <!-- Unités (le nombre est formaté selon la locale) -->
     <string name="distance_km">%1$s km</string>
+    <string name="distance_mi">%1$s mi</string>
 
     <!-- Suivi GPS -->
     <string name="suivi_titre">Suivi GPS</string>
